@@ -7,25 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  find-package-json:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Display Node.js version
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - name: Display current directory
-      run: pwd
-    - name: Display workspace directory structure
-      run: ls -Rla ${{ github.workspace }}
-    - name: Find package.json in workspace
-      run: find ${{ github.workspace }} -name "package.json"
-
-jobs:
   build:
-    needs: find-package-json
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -34,18 +16,18 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+    - name: Display Node.js version
+      run: node -v
+    - name: Display npm version
+      run: npm -v
     - name: Install dependencies
-      run: |
-        cd $(find ${{ github.workspace }} -name "package.json" | xargs dirname)
-        npm install
+      run: cd <path-to-directory> && npm install
     - name: Run build
-      run: |
-        cd $(find ${{ github.workspace }} -name "package.json" | xargs dirname)
-        npm run build
+      run: cd <path-to-directory> && npm run build
 
   test:
-    needs: build
     runs-on: ubuntu-latest
+    needs: build
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -53,18 +35,18 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+    - name: Display Node.js version
+      run: node -v
+    - name: Display npm version
+      run: npm -v
     - name: Install dependencies
-      run: |
-        cd $(find ${{ github.workspace }} -name "package.json" | xargs dirname)
-        npm install
+      run: cd <path-to-directory> && npm install
     - name: Run tests
-      run: |
-        cd $(find ${{ github.workspace }} -name "package.json" | xargs dirname)
-        npm test
+      run: cd <path-to-directory> && npm test
 
   deploy:
-    needs: test
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -72,16 +54,17 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+    - name: Display Node.js version
+      run: node -v
+    - name: Display npm version
+      run: npm -v
     - name: Install dependencies
-      run: |
-        cd $(find ${{ github.workspace }} -name "package.json" | xargs dirname)
-        npm install
+      run: cd <path-to-directory> && npm install
     - name: Deploy to AWS
       run: |
         set -euxo pipefail
-        cd $(find ${{ github.workspace }} -name "package.json" | xargs dirname)
+        cd <path-to-directory>
         ./deploy.sh
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
