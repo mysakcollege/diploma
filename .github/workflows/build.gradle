@@ -1,0 +1,23 @@
+my-project/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           └── App.java
+│   │   └── resources/
+│   └── test/
+│       ├── java/
+│       └── resources/
+├── gradle/
+│   └── wrapper/
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── .gitignore
+├── build.gradle
+├── gradlew
+├── gradlew.bat
+└── settings.gradle
