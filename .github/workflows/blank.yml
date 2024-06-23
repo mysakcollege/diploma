@@ -20,10 +20,18 @@ jobs:
       run: node -v
     - name: Display npm version
       run: npm -v
+    - name: Display current directory
+      run: pwd
+    - name: Display root directory structure
+      run: ls -Rla /
+    - name: Display workspace directory structure
+      run: ls -Rla ${{ github.workspace }}
+    - name: Find package.json in workspace
+      run: find ${{ github.workspace }} -name "package.json"
     - name: Install dependencies
-      run: cd diploma && npm install
+      run: cd <path-to-directory> && npm install
     - name: Run build
-      run: cd diploma && npm run build
+      run: cd <path-to-directory> && npm run build
 
   test:
     runs-on: ubuntu-latest
@@ -40,9 +48,9 @@ jobs:
     - name: Display npm version
       run: npm -v
     - name: Install dependencies
-      run: cd diploma && npm install
+      run: cd <path-to-directory> && npm install
     - name: Run tests
-      run: cd diploma && npm test
+      run: cd <path-to-directory> && npm test
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,11 +67,11 @@ jobs:
     - name: Display npm version
       run: npm -v
     - name: Install dependencies
-      run: cd diploma && npm install
+      run: cd <path-to-directory> && npm install
     - name: Deploy to AWS
       run: |
         set -euxo pipefail
-        cd diploma
+        cd <path-to-directory>
         ./deploy.sh
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
