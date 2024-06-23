@@ -19,32 +19,40 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest
+        id: run-tests
+        run: pytest --cov=./  # Використовуємо pytest з покриттям
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Set status to "Success"
-        if: always()
+        if: success()
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.repos.createStatus(
-              ref: ${{ github.event.ref }},
-              sha: ${{ github.event.sha }},
-              context: 'ci',
+            github.repos.createStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
               state: 'success',
-              description: 'Tests passed successfully!'
-            )
+              description: 'Tests passed successfully!',
+              context: 'ci'
+            })
 
       - name: Set status to "Failure" if tests fail
-        if: ${{ steps.run-tests.outcome == 'failure' }}
+        if: failure()
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.repos.createStatus(
-              ref: ${{ github.event.ref }},
-              sha: ${{ github.event.sha }},
-              context: 'ci',
+            github.repos.createStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
               state: 'failure',
-              description: 'Tests failed!'
-            )
+              description: 'Tests failed!',
+              context: 'ci'
+            })
