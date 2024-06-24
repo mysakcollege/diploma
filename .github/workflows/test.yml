@@ -26,3 +26,4 @@ name: Test
 
        - name: Run tests
          run: npm test
+      ![Test Status](https://img.shields.io/github/actions/workflow/status/USERNAME/REPOSITORY/test.yml?branch=main)
