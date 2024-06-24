@@ -1,46 +1,66 @@
- name: CI Pipeline
-   on:
-     push:
-       branches:
-         - main
-     pull_request:
-       branches:
-         - main
+name: CI Pipeline
 
-   jobs:
-     build:
-       runs-on: ubuntu-latest
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-       steps:
-       - name: Checkout code
-         uses: actions/checkout@v2
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-       - name: Set up Node.js
-         uses: actions/setup-node@v2
-         with:
-           node-version: '14'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-       - name: Install dependencies
-         run: npm install
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-       - name: Build project
-         run: npm run build
+      - name: Install dependencies
+        run: npm install
 
-     test:
-       runs-on: ubuntu-latest
-       needs: build
+      - name: Build project
+        run: npm run build
 
-       steps:
-       - name: Checkout code
-         uses: actions/checkout@v2
+  test:
+    runs-on: ubuntu-latest
+    needs: build
 
-       - name: Set up Node.js
-         uses: actions/setup-node@v2
-         with:
-           node-version: '14'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-       - name: Install dependencies
-         run: npm install
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-       - name: Run tests
-         run: npm test
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy
+        run: npm run deploy
