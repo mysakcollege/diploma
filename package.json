@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "echo \"Build process\""
+    "build": "echo \"Build process\"",
+    "deploy": "echo \"Deploy process\""
   },
   "author": "",
   "license": "ISC",
