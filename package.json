@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "Build process"
+    "build": "echo \"Build process\""
   },
   "author": "",
   "license": "ISC",
